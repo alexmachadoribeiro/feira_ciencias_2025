@@ -2,12 +2,50 @@
 
 {% block content %}
     <div class="container">
-        <dvi class="row">
-            <div class="col-12 col-md-6 col-lg-4">
-                <h3>Volume de água</h3>
+        <div class="row">
+            <div class="col-12 col-md-6 medidor">
+                <div class="icon-medidor">
+                    <img src="{{ url_for('static', filename='images/sea.png') }}" alt="Ícone de profundidade da água">
+                </div>
                 <div>
-                    <!-- <p>{{ volume_agua }} litros</p> -->
-                    <span class="texto-digital-bi visor">10</span><label> litros</label>
+                    <h3 class="texto-normal">Volume de água restante:</h3>
+                    <span class="texto-digital-bi visor">10</span><label class="texto-digital-bi"> litros</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 medidor">
+                <div class="icon-medidor">
+                    <img src="{{ url_for('static', filename='images/hot-water.png') }}" alt="Ícone de temperatura da água">
+                </div>
+                <div>
+                    <h3 class="texto-normal">Temperatura da água:</h3>
+                    <span class="texto-digital-bi visor">100º</span><label class="texto-digital-bi">Celsius</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 medidor">
+                <div class="icon-medidor">
+                    <img src="{{ url_for('static', filename='images/lighting.png') }}" alt="Ícone de energia gerada">
+                </div>
+                <div>
+                    <h3 class="texto-normal">Energia gerada:</h3>
+                    <span class="texto-digital-bi visor">1000</span><label class="texto-digital-bi">Watts</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 medidor">
+                <div class="icon-medidor">
+                    <img src="{{ url_for('static', filename='images/clock.png') }}" alt="Ícone de tempo restante">
+                </div>
+                <div>
+                    <h3 class="texto-normal">Tempo restante:</h3>
+                    <span class="texto-digital-bi visor">10:59:59</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 medidor">
+                <div class="icon-medidor">
+                    <img src="{{ url_for('static', filename='images/sea-salt.png') }}" alt="Ícone de sal">
+                </div>
+                <div>
+                    <h3 class="texto-normal">Quantidade de sal gerado:</h3>
+                    <span class="texto-digital-bi visor">10</span><label class="texto-digital-bi"> Kg</label>
                 </div>
             </div>
         </div>

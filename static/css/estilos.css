@@ -34,12 +34,34 @@ main {
     font-style: italic;
 }
 
+.texto-normal {
+    text-shadow: 5px 5px 10px #000;
+}
+
+label {
+    font-size: 30px;
+    padding-left: 10px;
+}
+
+.medidor {
+    margin: 10px 0px;
+}
+
+.icon-medidor {
+    float: left;
+}
+
+.icon-medidor img {
+    width: 100px;
+    margin: 40px 20px;
+}
+
 .visor {
-    font-size: 150px;
-    border: 1px inset #000;
-    border-radius: 10px;
+    font-size: 80px;
     padding: 20px;
-    background-color: #000;
+    /* border: 1px inset #000; */
+    /* border-radius: 10px; */
+    /* background-color: #000; */
 }
 
 footer {
