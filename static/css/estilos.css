@@ -36,10 +36,11 @@ main {
 
 .texto-normal {
     text-shadow: 5px 5px 10px #000;
+    margin: 0px 10px;
 }
 
 label {
-    font-size: 30px;
+    font-size: 40px;
     padding-left: 10px;
 }
 
@@ -57,11 +58,15 @@ label {
 }
 
 .visor {
-    font-size: 80px;
+    font-size: 60px;
     padding: 20px;
-    /* border: 1px inset #000; */
-    /* border-radius: 10px; */
-    /* background-color: #000; */
+}
+
+@media screen and (min-width: 992px) {
+    .visor {
+        font-size: 80px;
+    }
+
 }
 
 footer {
@@ -69,10 +74,10 @@ footer {
     text-align: center;
 }
 
-/* .min-vh-content {
-    min-height: 80vh;
-} */
-
 .img-negativo {
     filter: invert(100%);
 }
+
+/* .min-vh-content {
+    min-height: 80vh;
+} */
