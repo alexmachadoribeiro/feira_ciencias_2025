@@ -15,10 +15,21 @@ main {
     flex: 1;
 }
 
+label {
+    font-size: 40px;
+    padding-left: 10px;
+}
+
+footer {
+    padding: 20px 0;
+    text-align: center;
+}
+
 .texto-digital, .texto-digital-b, .texto-digital-i, .texto-digital-bi {
     font-family: 'Ds-digital', Arial, sans-serif;
     color: #ff8800;
-    text-shadow: 0px 0px 10px #ff8800;
+    text-shadow: 0px 0px 20px #ff8800;
+    /* text-shadow: 5px 5px 5px #000; */
 }
 
 .texto-digital-b {
@@ -39,11 +50,6 @@ main {
     margin: 0px 10px;
 }
 
-label {
-    font-size: 40px;
-    padding-left: 10px;
-}
-
 .medidor {
     margin: 10px 0px;
 }
@@ -55,6 +61,7 @@ label {
 .icon-medidor img {
     width: 100px;
     margin: 40px 20px;
+    filter: drop-shadow(5px 5px 10px #000);
 }
 
 .visor {
@@ -62,22 +69,12 @@ label {
     padding: 20px;
 }
 
-@media screen and (min-width: 992px) {
-    .visor {
-        font-size: 80px;
-    }
-
-}
-
-footer {
-    padding: 20px 0;
-    text-align: center;
-}
-
 .img-negativo {
     filter: invert(100%);
 }
 
-/* .min-vh-content {
-    min-height: 80vh;
-} */
+@media screen and (min-width: 1200px) {
+    .visor {
+        font-size: 80px;
+    }
+}
