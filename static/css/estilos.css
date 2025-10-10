@@ -29,7 +29,7 @@ footer {
     font-family: 'Ds-digital', Arial, sans-serif;
     color: #ff8800;
     text-shadow: 0px 0px 20px #ff8800;
-    /* text-shadow: 5px 5px 5px #000; */
+    /* text-shadow: 5px 5px 15px #000; */
 }
 
 .texto-digital-b {
@@ -61,7 +61,7 @@ footer {
 .icon-medidor img {
     width: 100px;
     margin: 40px 20px;
-    filter: drop-shadow(5px 5px 10px #000);
+    filter: drop-shadow(5px 5px 10px #16161d);
 }
 
 .visor {
