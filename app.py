@@ -3,7 +3,7 @@ import time
 
 app = Flask(__name__)
 
-agua_salgada = 0.2  # Exemplo, defina conforme necessário
+agua_salgada = 25
 inicio = time.time()
 TEMPERATURA_INICIAL = 25
 TEMPERATURA_FINAL = 100
@@ -13,6 +13,7 @@ TEMPO_POR_UNIDADE = 5 * 60
 def home():
     # agua_potavel = agua_salgada - 0.0065
     agua_potavel = 0.0
+    salinidade = 3.5
     temperatura_agua = 25.0
     energia = 150
     sal_extraido = 0.0
@@ -20,6 +21,7 @@ def home():
     return render_template(
         'index.html',
         agua_salgada=agua_salgada,
+        salinidade=salinidade,
         agua_potavel=agua_potavel,
         temperatura_agua=temperatura_agua,
         energia=energia,

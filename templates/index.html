@@ -4,62 +4,72 @@
 <div class="container">
     <div class="row mt-5">
         <!-- Volume de água -->
-        <div class="col-3 col-md-2 col-lg-1 icon-medidor mt-5 mb-5">
+        <div class="col-3 col-md-2 col-lg-1 icon-medidor">
             <img src="{{ url_for('static', filename='images/sea.png') }}" alt="Água" class="img-fluid">
         </div>
-        <div class="col-9 col-md-4 col-lg-3 medidor mt-5 mb-5">
+        <div class="col-9 col-md-4 col-lg-3 medidor">
             <div>
-                <h4 class="texto-normal">Água salgada:</h4>
+                <h4 class="texto-normal">Água do mar:</h4>
                 <span class="texto-digital-bi visor">{{ agua_salgada }}</span><label class="texto-digital-bi">l</label>
             </div>
         </div>
-        <!-- Temperatura da água -->
-        <div class="col-3 col-md-2 col-lg-1 icon-medidor mt-5 mb-5">
-            <img src="{{ url_for('static', filename='images/hot-water.png') }}" alt="Temperatura" class="img-fluid">
+        <!-- Salinidade de água -->
+        <div class="col-3 col-md-2 col-lg-1 icon-medidor">
+            <img src="{{ url_for('static', filename='images/salinity.png') }}" alt="Água" class="img-fluid">
         </div>
-        <div class="col-9 col-md-4 col-lg-3 medidor mt-5 mb-5 mt-5 mb-5">
+        <div class="col-9 col-md-4 col-lg-3 medidor">
             <div>
-                <h4 class="texto-normal">Temperatura da água:</h4>
-                <span class="texto-digital-bi visor" id="indicador-temperatura"></span><label class="texto-digital-bi">ºC</label>
+                <h4 class="texto-normal">Salinidade:</h4>
+                <span class="texto-digital-bi visor">{{ salinidade }}</span><label class="texto-digital-bi">%</label>
             </div>
         </div>
         <!-- Energia -->
-        <div class="col-3 col-md-2 col-lg-1 icon-medidor mt-5 mb-5">
+        <div class="col-3 col-md-2 col-lg-1 icon-medidor">
             <img src="{{ url_for('static', filename='images/lighting.png') }}" alt="Energia" class="img-fluid">
         </div>
-        <div class="col-9 col-md-4 col-lg-3 medidor mt-5 mb-5">
+        <div class="col-9 col-md-4 col-lg-3 medidor">
             <div>
                 <h4 class="texto-normal">Energia:</h4>
                 <span class="texto-digital-bi visor">{{ energia }}</span><label class="texto-digital-bi">W</label>
             </div>
         </div>
+        <!-- Temperatura da água -->
+        <div class="col-3 col-md-2 col-lg-1 icon-medidor">
+            <img src="{{ url_for('static', filename='images/hot-water.png') }}" alt="Temperatura" class="img-fluid">
+        </div>
+        <div class="col-9 col-md-4 col-lg-3 medidor">
+            <div>
+                <h4 class="texto-normal">Temperatura da água:</h4>
+                <span class="texto-digital-bi visor" id="indicador-temperatura"></span><label class="texto-digital-bi">ºC</label>
+            </div>
+        </div>
         <!-- Dessalinização -->
-        <div class="col-3 col-md-2 col-lg-1 icon-medidor mt-5 mb-5">
+        <div class="col-3 col-md-2 col-lg-1 icon-medidor">
             <img src="{{ url_for('static', filename='images/water.png') }}" alt="Dessalinização" class="img-fluid">
         </div>
-        <div class="col-9 col-md-4 col-lg-3 medidor mt-5 mb-5">
+        <div class="col-9 col-md-4 col-lg-3 medidor">
             <div>
-                <h4 class="texto-normal">Água potável:</h4>
+                <h4 class="texto-normal">Água potável estimada:</h4>
                 <span class="texto-digital-bi visor">{{ agua_potavel }}</span><label class="texto-digital-bi">l</label>
             </div>
         </div>
         <!-- Sal -->
-        <div class="col-3 col-md-2 col-lg-1 icon-medidor mt-5 mb-5">
+        <div class="col-3 col-md-2 col-lg-1 icon-medidor">
             <img src="{{ url_for('static', filename='images/salt.png') }}" alt="Sal" class="img-fluid">
         </div>
-        <div class="col-9 col-md-4 col-lg-3 medidor mt-5 mb-5">
+        <div class="col-9 col-md-4 col-lg-3 medidor">
             <div>
-                <h4 class="texto-normal">Sal extraído:</h4>
+                <h4 class="texto-normal">Sal extraído estimado:</h4>
                 <span class="texto-digital-bi visor">{{ sal_extraido }}</span><label class="texto-digital-bi">g</label>
             </div>
         </div>
         <!-- Tempo -->
-        <div class="col-3 col-md-2 col-lg-1 icon-medidor mt-5 mb-5">
+        <div class="col-3 col-md-2 col-lg-1 icon-medidor">
             <img src="{{ url_for('static', filename='images/clock.png') }}" alt="Tempo" class="img-fluid">
         </div>
-        <div class="col-9 col-md-4 col-lg-3 medidor mt-5 mb-5">
+        <div class="col-9 col-md-4 col-lg-3 medidor">
             <div>
-                <h4 class="texto-normal">Tempo restante:</h4>
+                <h4 class="texto-normal">Tempo estimado:</h4>
                 <span class="texto-digital-bi visor" id="tempo-restante"></span>
             </div>
         </div>

@@ -28,7 +28,7 @@ footer {
 .texto-digital, .texto-digital-b, .texto-digital-i, .texto-digital-bi {
     font-family: 'Ds-digital', Arial, sans-serif;
     color: #ff8800;
-    text-shadow: 0px 0px 20px #ff8800;
+    text-shadow: 0px 0px 25px #ff8800;
     /* text-shadow: 5px 5px 15px #000; */
 }
 
@@ -50,8 +50,8 @@ footer {
     margin: 0px 10px;
 }
 
-.medidor {
-    margin: 10px 0px;
+.medidor, .icon-medidor {
+    margin: 15px 0px;
 }
 
 .icon-medidor {
