@@ -1,7 +1,18 @@
-let tempoRestante = window.tempoRestante;
+// Cada litro = 3600 segundos (1h) de tempo estimado
+const TAXA_EVAPORACAO_LPS = 0.0002778; // litros por segundo
+
+// Obtém o valor atual de água salgada exibido na página
+const visorAguaSalgada = document.querySelectorAll('.visor')[0];
+let aguaSalgadaAtual = parseFloat(visorAguaSalgada.textContent.replace(',', '.')) || 0;
+
+// Cada litro = 3600 segundos (1h) de tempo estimado
+let tempoRestante = Math.round(aguaSalgadaAtual * 3600);
+
 let temperaturaAgua = window.temperaturaAgua;
+let contagemAtiva = false;
 
 const formatarTempo = (segundos) => {
+    if (segundos <= 0 || isNaN(segundos)) return "--:--:--";
     const h = String(Math.floor(segundos / 3600)).padStart(1, '0');
     const m = String(Math.floor((segundos % 3600) / 60)).padStart(2, '0');
     const s = String(segundos % 60).padStart(2, '0');
@@ -19,20 +30,56 @@ const atualizarIndicadorTemperatura = () => {
         });
 }
 
-const atualizarTempo = () => {
-    if (temperaturaAgua < 100) {
+const atualizarIndicadorVaporization = () => {
+    fetch('/evaporacao_atual')
+        .then(response => response.json())
+        .then(data => {
+            const indicador = document.querySelector("#indicador-vaporization");
+            if (data.evaporacao === null) {
+                indicador.textContent = "--";
+            } else {
+                indicador.textContent = Number(data.evaporacao).toFixed(2);
+            }
+        });
+}
+
+function atualizarTempoEstimado() {
+    // Atualiza o tempo estimado baseado no valor atual de água salgada
+    const visorAguaSalgada = document.querySelectorAll('.visor')[0];
+    let aguaSalgadaAtual = parseFloat(visorAguaSalgada.textContent.replace(',', '.')) || 0;
+    let tempoRestante = Math.floor(aguaSalgadaAtual / TAXA_EVAPORACAO_LPS);
+
+    if (temperaturaAgua < 100 || aguaSalgadaAtual <= 0) {
         document.querySelector("#tempo-restante").textContent = "--:--:--";
-        setTimeout(atualizarTempo, 1000);
+        contagemAtiva = false;
     } else if (tempoRestante > 0) {
         document.querySelector("#tempo-restante").textContent = formatarTempo(tempoRestante);
-        tempoRestante--;
-        setTimeout(atualizarTempo, 1000);
+        contagemAtiva = true;
     } else {
         document.querySelector("#tempo-restante").textContent = "--:--:--";
+        contagemAtiva = false;
     }
 }
 
-atualizarTempo();
+function atualizarValores() {
+    // Só atualiza se a temperatura for 100 ºC e o tempo estiver rodando
+    if (temperaturaAgua >= 100 && contagemAtiva) {
+        fetch('/valores_atualizados')
+            .then(response => response.json())
+            .then(data => {
+                document.querySelectorAll('.visor')[0].textContent = data.agua_salgada;
+                document.querySelectorAll('.visor')[6].textContent = data.agua_potavel;
+                document.querySelectorAll('.visor')[7].textContent = Number(data.sal_extraido).toFixed(2);
+            });
+    }
+    // Após atualizar valores, atualize o tempo estimado
+    atualizarTempoEstimado();
+}
 
-// Atualize o indicador a cada segundo
+// Atualize o indicador de temperatura e vaporização a cada segundo
 setInterval(atualizarIndicadorTemperatura, 1000);
+setInterval(atualizarIndicadorVaporization, 1000);
+// Atualize valores e tempo estimado a cada segundo
+setInterval(atualizarValores, 1000);
+// Atualize o tempo estimado ao carregar a página
+atualizarTempoEstimado();

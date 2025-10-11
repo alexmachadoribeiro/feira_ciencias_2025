@@ -1,32 +1,38 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import time
 
 app = Flask(__name__)
 
-agua_salgada = 25
+# Variáveis globais para simulação
+agua_salgada = 1.0
+agua_potavel = 0.0
+sal_extraido = 0.0
 inicio = time.time()
-TEMPERATURA_INICIAL = 25
+TEMPERATURA_INICIAL = 20
 TEMPERATURA_FINAL = 100
 TEMPO_POR_UNIDADE = 5 * 60
+EVAPORACAO_POR_SEGUNDO = 0.2778 / 1000  # ml para litros
+SALINIDADE = 3.5 / 100  # 3.5%
 
 @app.route('/')
 def home():
-    # agua_potavel = agua_salgada - 0.0065
-    agua_potavel = 0.0
     salinidade = 3.5
-    temperatura_agua = 25.0
-    energia = 150
-    sal_extraido = 0.0
+    temperatura_agua = TEMPERATURA_INICIAL
+    temperatura_ambiente = 20
+    energia = 1114.67
     tempo_restante = 3600 * agua_salgada
+    evaporacao = 0.2778
     return render_template(
         'index.html',
         agua_salgada=agua_salgada,
         salinidade=salinidade,
         agua_potavel=agua_potavel,
         temperatura_agua=temperatura_agua,
+        temperatura_ambiente=temperatura_ambiente,
         energia=energia,
         sal_extraido=sal_extraido,
-        tempo_restante=tempo_restante
+        tempo_restante=tempo_restante,
+        evaporacao=evaporacao,
     )
 
 @app.route('/temperatura_atual')
@@ -38,6 +44,46 @@ def temperatura_atual():
     else:
         temperatura = TEMPERATURA_INICIAL + (TEMPERATURA_FINAL - TEMPERATURA_INICIAL) * (tempo_passado / tempo_total)
     return jsonify({'temperatura': round(temperatura, 1)})
+
+@app.route('/evaporacao_atual')
+def evaporacao_atual():
+    tempo_total = agua_salgada * TEMPO_POR_UNIDADE
+    tempo_passado = time.time() - inicio
+    if tempo_passado >= tempo_total:
+        temperatura = TEMPERATURA_FINAL
+    else:
+        temperatura = TEMPERATURA_INICIAL + (TEMPERATURA_FINAL - TEMPERATURA_INICIAL) * (tempo_passado / tempo_total)
+    if temperatura < 100:
+        evaporacao = None
+    else:
+        evaporacao = 0.2778
+    return jsonify({'evaporacao': evaporacao})
+
+@app.route('/set_agua_salgada', methods=['POST'])
+def set_agua_salgada():
+    global agua_salgada, agua_potavel, sal_extraido, inicio
+    data = request.get_json()
+    agua_salgada = float(data.get('agua_salgada', 1.0))
+    agua_potavel = 0.0
+    sal_extraido = 0.0
+    inicio = time.time()
+    return '', 204
+
+@app.route('/valores_atualizados')
+def valores_atualizados():
+    global agua_salgada, agua_potavel, sal_extraido
+    tempo_passado = time.time() - inicio
+    evaporado = min(agua_salgada, EVAPORACAO_POR_SEGUNDO * tempo_passado)
+    agua_atual = max(agua_salgada - evaporado, 0)
+    sal_extraido_atual = sal_extraido + evaporado * SALINIDADE * 1000  # g
+    agua_potavel_atual = agua_potavel + evaporado * (1 - SALINIDADE)
+    if agua_atual <= 0:
+        agua_atual = 0
+    return jsonify({
+        'agua_salgada': round(agua_atual, 3),
+        'sal_extraido': round(sal_extraido_atual, 3),
+        'agua_potavel': round(agua_potavel_atual, 3)
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)

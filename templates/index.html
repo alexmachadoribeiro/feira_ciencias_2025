@@ -9,7 +9,7 @@
         </div>
         <div class="col-9 col-md-4 col-lg-3 medidor">
             <div>
-                <h4 class="texto-normal">Água do mar:</h4>
+                <h4 class="texto-normal">Água salgada:</h4>
                 <span class="texto-digital-bi visor">{{ agua_salgada }}</span><label class="texto-digital-bi">l</label>
             </div>
         </div>
@@ -23,13 +23,23 @@
                 <span class="texto-digital-bi visor">{{ salinidade }}</span><label class="texto-digital-bi">%</label>
             </div>
         </div>
+        <!-- Fonte de calor -->
+        <div class="col-3 col-md-2 col-lg-1 icon-medidor">
+            <img src="{{ url_for('static', filename='images/sun.png') }}" alt="Energia" class="img-fluid">
+        </div>
+        <div class="col-9 col-md-4 col-lg-3 medidor">
+            <div>
+                <h4 class="texto-normal">Temperatura ambiente:</h4>
+                <span class="texto-digital-bi visor">{{ temperatura_ambiente }}</span><label class="texto-digital-bi">ºC</label>
+            </div>
+        </div>
         <!-- Energia -->
         <div class="col-3 col-md-2 col-lg-1 icon-medidor">
             <img src="{{ url_for('static', filename='images/lighting.png') }}" alt="Energia" class="img-fluid">
         </div>
         <div class="col-9 col-md-4 col-lg-3 medidor">
             <div>
-                <h4 class="texto-normal">Energia:</h4>
+                <h4 class="texto-normal">Potência gerada:</h4>
                 <span class="texto-digital-bi visor">{{ energia }}</span><label class="texto-digital-bi">W</label>
             </div>
         </div>
@@ -41,6 +51,16 @@
             <div>
                 <h4 class="texto-normal">Temperatura da água:</h4>
                 <span class="texto-digital-bi visor" id="indicador-temperatura"></span><label class="texto-digital-bi">ºC</label>
+            </div>
+        </div>
+        <!-- Vaporização da água -->
+        <div class="col-3 col-md-2 col-lg-1 icon-medidor">
+            <img src="{{ url_for('static', filename='images/vaporize.png') }}" alt="Vaporização" class="img-fluid">
+        </div>
+        <div class="col-9 col-md-4 col-lg-3 medidor">
+            <div>
+                <h4 class="texto-normal">Taxa de vaporização:</h4>
+                <span class="texto-digital-bi visor" id="indicador-vaporization">--</span><label class="texto-digital-bi">ml/s</label>
             </div>
         </div>
         <!-- Dessalinização -->
@@ -60,7 +80,7 @@
         <div class="col-9 col-md-4 col-lg-3 medidor">
             <div>
                 <h4 class="texto-normal">Sal extraído estimado:</h4>
-                <span class="texto-digital-bi visor">{{ sal_extraido }}</span><label class="texto-digital-bi">g</label>
+                <span class="texto-digital-bi visor">{{ sal_extraido|round(2) }}</span><label class="texto-digital-bi">g</label>
             </div>
         </div>
         <!-- Tempo -->
@@ -75,4 +95,42 @@
         </div>
     </div>
 </div>
+
+<!-- Modal para entrada de água salgada -->
+<div class="modal fade" id="modalAguaSalgada" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Definir volume de água salgada</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <input type="number" min="0" step="0.01" id="inputAguaSalgada" class="form-control" placeholder="Litros">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSalvarAguaSalgada">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelector('.icon-medidor img[alt="Água"]').addEventListener('click', function () {
+        var modal = new bootstrap.Modal(document.getElementById('modalAguaSalgada'));
+        modal.show();
+    });
+
+    document.getElementById('btnSalvarAguaSalgada').addEventListener('click', function () {
+        const valor = parseFloat(document.getElementById('inputAguaSalgada').value);
+        if (!isNaN(valor) && valor > 0) {
+            fetch('/set_agua_salgada', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ agua_salgada: valor })
+            }).then(() => {
+                location.reload();
+            });
+        }
+    });
+</script>
 {% endblock %}
