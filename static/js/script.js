@@ -67,8 +67,9 @@ function atualizarValores() {
         fetch('/valores_atualizados')
             .then(response => response.json())
             .then(data => {
-                document.querySelectorAll('.visor')[0].textContent = data.agua_salgada;
-                document.querySelectorAll('.visor')[6].textContent = data.agua_potavel;
+                // Arredonda para 2 casas decimais ao exibir
+                document.querySelectorAll('.visor')[0].textContent = Number(data.agua_salgada).toFixed(2);
+                document.querySelectorAll('.visor')[6].textContent = Number(data.agua_potavel).toFixed(2);
                 document.querySelectorAll('.visor')[7].textContent = Number(data.sal_extraido).toFixed(2);
             });
     }

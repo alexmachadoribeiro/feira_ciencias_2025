@@ -2,7 +2,15 @@
 
 {% block content %}
 <div class="container">
-    <div class="row mt-5">
+    <div class="container-fluid d-flex justify-content-center">
+        <span class="mb-0 h1">
+            <div class="col text-center texto-digital mt-4">
+                <h1>Painel de monitoramento</h1>
+                <!-- <p class="lead" style="margin-bottom: -3px;">Monitore os sensores aqui.</p> -->
+            </div>
+        </span>
+    </div>
+    <div class="row mt-4">
         <!-- Volume de água -->
         <div class="col-3 col-md-2 col-lg-1 icon-medidor">
             <img src="{{ url_for('static', filename='images/sea.png') }}" alt="Água" class="img-fluid">
@@ -10,7 +18,7 @@
         <div class="col-9 col-md-4 col-lg-3 medidor">
             <div>
                 <h4 class="texto-normal">Água salgada:</h4>
-                <span class="texto-digital-bi visor">{{ agua_salgada }}</span><label class="texto-digital-bi">l</label>
+                <span class="texto-digital-bi visor">{{ '%.2f'|format(agua_salgada|float) }}</span><label class="texto-digital-bi">l</label>
             </div>
         </div>
         <!-- Salinidade de água -->
@@ -70,7 +78,7 @@
         <div class="col-9 col-md-4 col-lg-3 medidor">
             <div>
                 <h4 class="texto-normal">Água potável estimada:</h4>
-                <span class="texto-digital-bi visor">{{ agua_potavel }}</span><label class="texto-digital-bi">l</label>
+                <span class="texto-digital-bi visor">{{ '%.2f'|format(agua_potavel|float) }}</span><label class="texto-digital-bi">l</label>
             </div>
         </div>
         <!-- Sal -->
