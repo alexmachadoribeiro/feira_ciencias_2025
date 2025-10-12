@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 import time
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -83,6 +84,28 @@ def valores_atualizados():
         'agua_salgada': round(agua_atual, 3),
         'sal_extraido': round(sal_extraido_atual, 3),
         'agua_potavel': round(agua_potavel_atual, 3)
+    })
+
+@app.route('/tempo_zerar')
+def tempo_zerar():
+    tempo_total_aquecimento = agua_salgada * TEMPO_POR_UNIDADE
+    tempo_passado = time.time() - inicio
+    agora = time.time()
+
+    if tempo_passado < tempo_total_aquecimento:
+        # Ainda está aquecendo, calcula quando chega a 100°C
+        instante_100c = inicio + tempo_total_aquecimento
+        # Após 100°C, começa a evaporar
+        tempo_evaporacao = agua_salgada / EVAPORACAO_POR_SEGUNDO
+        instante_zerar = instante_100c + tempo_evaporacao
+    else:
+        # Já está evaporando
+        evaporado = EVAPORACAO_POR_SEGUNDO * (agora - (inicio + tempo_total_aquecimento))
+        agua_restante = max(agua_salgada - evaporado, 0)
+        instante_zerar = agora + (agua_restante / EVAPORACAO_POR_SEGUNDO) if agua_restante > 0 else agora
+
+    return jsonify({
+        'timestamp_zerar': int(instante_zerar)
     })
 
 if __name__ == '__main__':

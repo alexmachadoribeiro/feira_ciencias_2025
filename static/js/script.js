@@ -11,6 +11,8 @@ let tempoRestante = Math.round(aguaSalgadaAtual * 3600);
 let temperaturaAgua = window.temperaturaAgua;
 let contagemAtiva = false;
 
+let timestampZerar = null;
+
 const formatarTempo = (segundos) => {
     if (segundos <= 0 || isNaN(segundos)) return "--:--:--";
     const h = String(Math.floor(segundos / 3600)).padStart(1, '0');
@@ -43,44 +45,74 @@ const atualizarIndicadorVaporization = () => {
         });
 }
 
-function atualizarTempoEstimado() {
-    // Atualiza o tempo estimado baseado no valor atual de água salgada
-    const visorAguaSalgada = document.querySelectorAll('.visor')[0];
-    let aguaSalgadaAtual = parseFloat(visorAguaSalgada.textContent.replace(',', '.')) || 0;
-    let tempoRestante = Math.floor(aguaSalgadaAtual / TAXA_EVAPORACAO_LPS);
-
-    if (temperaturaAgua < 100 || aguaSalgadaAtual <= 0) {
-        document.querySelector("#tempo-restante").textContent = "--:--:--";
-        contagemAtiva = false;
-    } else if (tempoRestante > 0) {
-        document.querySelector("#tempo-restante").textContent = formatarTempo(tempoRestante);
-        contagemAtiva = true;
-    } else {
-        document.querySelector("#tempo-restante").textContent = "--:--:--";
-        contagemAtiva = false;
-    }
+function buscarTimestampZerar() {
+    fetch('/tempo_zerar')
+        .then(response => response.json())
+        .then(data => {
+            timestampZerar = data.timestamp_zerar;
+        });
 }
 
+// Atualiza a cada 10 segundos para garantir precisão
+setInterval(buscarTimestampZerar, 10000);
+buscarTimestampZerar();
+
+function atualizarTempoRestante() {
+    if (!timestampZerar) {
+        document.querySelector("#tempo-restante").textContent = "--:--:--";
+        setTimeout(atualizarTempoRestante, 1000);
+        return;
+    }
+    const agora = Math.floor(Date.now() / 1000);
+    let segundosRestantes = timestampZerar - agora;
+    if (temperaturaAgua < 100) {
+        document.querySelector("#tempo-restante").textContent = "--:--:--";
+    } else if (segundosRestantes > 0) {
+        document.querySelector("#tempo-restante").textContent = formatarTempo(segundosRestantes);
+    } else {
+        document.querySelector("#tempo-restante").textContent = "00:00:00";
+    }
+    setTimeout(atualizarTempoRestante, 1000);
+}
+
+atualizarTempoRestante();
+
 function atualizarValores() {
-    // Só atualiza se a temperatura for 100 ºC e o tempo estiver rodando
-    if (temperaturaAgua >= 100 && contagemAtiva) {
+    // Só atualiza os valores quando a temperatura da água for igual ou maior a 100 ºC
+    if (temperaturaAgua >= 100) {
         fetch('/valores_atualizados')
             .then(response => response.json())
             .then(data => {
-                // Arredonda para 2 casas decimais ao exibir
                 document.querySelectorAll('.visor')[0].textContent = Number(data.agua_salgada).toFixed(2);
                 document.querySelectorAll('.visor')[6].textContent = Number(data.agua_potavel).toFixed(2);
                 document.querySelectorAll('.visor')[7].textContent = Number(data.sal_extraido).toFixed(2);
             });
     }
-    // Após atualizar valores, atualize o tempo estimado
-    atualizarTempoEstimado();
 }
+
+function atualizarTempoEstimado() {
+    if (!timestampZerar) {
+        document.querySelector("#tempo-restante").textContent = "--:--:--";
+        return;
+    }
+    const agora = Math.floor(Date.now() / 1000);
+    let segundosRestantes = timestampZerar - agora;
+    if (temperaturaAgua < 100) {
+        document.querySelector("#tempo-restante").textContent = "--:--:--";
+    } else if (segundosRestantes > 0) {
+        document.querySelector("#tempo-restante").textContent = formatarTempo(segundosRestantes);
+    } else {
+        document.querySelector("#tempo-restante").textContent = "00:00:00";
+    }
+}
+
+// Atualize o tempo estimado a cada segundo
+setInterval(atualizarTempoEstimado, 1000);
 
 // Atualize o indicador de temperatura e vaporização a cada segundo
 setInterval(atualizarIndicadorTemperatura, 1000);
 setInterval(atualizarIndicadorVaporization, 1000);
-// Atualize valores e tempo estimado a cada segundo
+// Atualize valores a cada segundo (mas só muda se temperatura >= 100)
 setInterval(atualizarValores, 1000);
 // Atualize o tempo estimado ao carregar a página
 atualizarTempoEstimado();
