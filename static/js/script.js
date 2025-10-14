@@ -116,3 +116,19 @@ setInterval(atualizarIndicadorVaporization, 1000);
 setInterval(atualizarValores, 1000);
 // Atualize o tempo estimado ao carregar a página
 atualizarTempoEstimado();
+
+function atualizarTemperaturaBrasilia() {
+    fetch('/temperatura_brasilia')
+        .then(response => response.json())
+        .then(data => {
+            // Atualiza o visor da temperatura ambiente (Brasília)
+            document.querySelectorAll('.visor')[2].textContent =
+                data.temperatura !== undefined && data.temperatura !== "--"
+                    ? Number(data.temperatura).toFixed(1)
+                    : "--";
+        });
+}
+
+// Atualize a temperatura de Brasília a cada 30 minutos (1800000 ms)
+setInterval(atualizarTemperaturaBrasilia, 1800000);
+atualizarTemperaturaBrasilia();

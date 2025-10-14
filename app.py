@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 import time
 from datetime import datetime
+import requests
 
 app = Flask(__name__)
 
@@ -107,6 +108,28 @@ def tempo_zerar():
     return jsonify({
         'timestamp_zerar': int(instante_zerar)
     })
+
+@app.route('/temperatura_brasilia')
+def temperatura_brasilia():
+    # Coordenadas de Brasília: latitude -15.78, longitude -47.93
+    url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "latitude": -15.78,
+        "longitude": -47.93,
+        "current_weather": True,
+        "timezone": "America/Sao_Paulo"
+    }
+    try:
+        resp = requests.get(url, params=params, timeout=5)
+        resp.raise_for_status()
+        data = resp.json()
+        temperatura = data.get("current_weather", {}).get("temperature")
+        if temperatura is not None:
+            return jsonify({"temperatura": temperatura})
+        else:
+            return jsonify({"temperatura": "--"})
+    except Exception:
+        return jsonify({"temperatura": "--"})
 
 if __name__ == '__main__':
     app.run(debug=True)
