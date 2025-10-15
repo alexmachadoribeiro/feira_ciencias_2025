@@ -21,7 +21,7 @@ def home():
     salinidade = 3.5
     temperatura_agua = TEMPERATURA_INICIAL
     temperatura_ambiente = 20
-    energia = 1114.67
+    energia = 60
     tempo_restante = 3600 * agua_salgada
     evaporacao = 0.2778
     return render_template(
