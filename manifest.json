@@ -1,0 +1,28 @@
+{
+  "background_color": "#000000",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "feira-ciencias-2025.onrender",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "feira-ciencias-2025.onrender",
+  "start_url": "/",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "https://feira-ciencias-2025.onrender.com/static/images/data-analysis.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "isSquare": true,
+      "isPng": true,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 512,
+      "is512x512": true,
+      "is256x256": false,
+      "is192x192": false
+    }
+  ],
+  "id": "feira-ciencias-2025",
+  "description": "Site da Semana Nacional de Ciência e Tecnologia."
+}
